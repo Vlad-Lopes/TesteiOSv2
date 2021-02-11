@@ -18,6 +18,7 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var tableViewItens: UITableView!
     
+    var cliente: Cliente?
     var lancamentos: [Account] = []
     
     override func viewDidLoad() {
@@ -26,14 +27,11 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
         var accountManager = AccountManager()
         accountManager.delegate = self
         accountManager.FetchAccount(id: 1)
-       
-//        var lancamento = Account(tipo: "Pagamento", data: 12022021, ident: "Conta de Luz", valor: 123.67)
-//        lancamentos.append(lancamento)
-//        lancamentos.append(lancamento)
-//        lancamentos.append(lancamento)
-//        lancamentos.append(lancamento)
-//        lancamentos.append(lancamento)
-        
+        DispatchQueue.main.async {
+            self.lblUserName.text = self.cliente!.name
+            self.lblAccountNumber.text = self.cliente!.bankAccount
+            self.lblAccountBalance.text = String(self.cliente!.balance)
+        }
         lblPeriodo.text = "Recentes"
 
         // Do any additional setup after loading the view.
@@ -47,11 +45,12 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemViewCell
         let lancamento = lancamentos[indexPath.row]
+  
         cell.lblTipo.text = lancamento.tipo
-        cell.lblData.text = "12/02/2021"   //String(lancamento.data)
+        cell.lblData.text = lancamento.data
         cell.lblIdent.text = lancamento.ident
-        cell.lblValor.text = "123.45"  //String(lancamento.valor)
-        
+        cell.lblValor.text = String(lancamento.valor)
+
         return cell
     }
     

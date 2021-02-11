@@ -6,55 +6,182 @@
 //
 
 import Foundation
+import CoreLocation
+import CPF_CNPJ_Validator
 
-struct TesteLogin {
-    func validaLogin(user: UserLogin) -> Bool {
-        if user.login .isEmpty {
-            user.errorMessage(msg: 1)
-        } else if user.login != "nnn" {
-            user.errorMessage(msg: 2)
-        } else if user.password .isEmpty {
-            user.errorMessage(msg: 3)
-        } else if !validaPassword(passw: user.password) {
-            user.errorMessage(msg: 4)
-        } else if user.password == "yyy" {
-            user.errorMessage(msg: 5)
-        }
-        if user.message == nil {
-            return true
+protocol LoginManagerDelegate {
+    func didUpdateLogin(cliente: Cliente)
+    
+    func didFailWithError(error: Error)
+}
+
+struct LoginManager {
+
+    var user: UserLogin
+    
+    func tratarLogin() -> Bool{
+        if LoginValidate().validaLogin(user: user) {
+            setLogin(login: user.login)
+            if requestLogin(user: user) {
+                return true
+            } else {
+                user.setMessage(message: LoginError.invalid.getErroLogin())
+                return false
+            }
         } else {
             return false
         }
     }
+  
+    var delegate: LoginManagerDelegate?
     
-    func validaPassword(passw: String) -> Bool {
-        var upper = false
-        var special = false
-        var normal = false
+    func requestLogin (user: UserLogin) -> Bool {
+        let urlString = "https://bank-app-test.herokuapp.com/api/login"
         
-        for chr in passw {
-            if chr .isUppercase {
-                upper = true
-                continue
+        let json: [String: Any] = ["user": "test_user", "password": "Test@1"]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.httpBody = jsonData
+
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: request) { (data, response, error) in
+                if error != nil {
+                    self.delegate?.didFailWithError(error: error!)
+                    return
+                }
+                if let safeData = data {
+                    if let info = self.parseJSON(infoData: safeData) {
+                        self.delegate?.didUpdateLogin(cliente: info)
+                    }
+                }
             }
-            if chr .isLetter || chr .isNumber {
-                normal = true
-                continue
-            }
-            if String(chr).range(of: ".*[^A-Za-z0-9].*", options: .regularExpression) != nil {
-                special = true
-                continue
-            }
-        }
-        
-        if upper  && normal && special {
-            return true
+            task.resume()
         } else {
             return false
+        }
+        return true
+    }
+
+    func parseJSON(infoData: Data) -> Cliente? {
+        let decoder = JSONDecoder()
+        do {
+            let decoderData = try decoder.decode(UserData.self, from: infoData)
+
+            let id = decoderData.userAccount.userId
+            let nome = decoderData.userAccount.name
+            let conta = decoderData.userAccount.bankAccount
+            let agencia = decoderData.userAccount.agency
+            let saldo = decoderData.userAccount.balance
+            let cliente = Cliente(clientId: id, name: nome, bankAccount: conta, agency: agencia, balance: saldo)
+            print(cliente)
+            return cliente
+        } catch {
+            print(error.localizedDescription)
+            self.delegate?.didFailWithError(error: error)
+            return nil
         }
     }
 }
+           
+            
+            
+            
+//            var postRequest = URLRequest(url: url)
+//            postRequest.httpMethod = "POST"
+//            postRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//            postRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+//
+//            let teste = ["nome": "meunome", "senha": "minhasenha"]
+//            do {
+//                    postRequest.httpBody = try JSONSerialization.data(withJSONObject: teste, options: .prettyPrinted)
+//                } catch let error {
+//                    self.delegate?.didFailWithError(error: error)
+//                    return
+//                }
+//
+//            let task = session.dataTask(with: postRequest) { (data, response, error) in
+//                if error != nil {
+//                    self.delegate?.didFailWithError(error: error!)
+//                    return
+//                }
+//                if let safeData = data {
+//                    if let info = self.parseJSON(infoData: safeData) {
+//                        self.delegate?.didUpdateLogin(cliente: info)
+//                        print("pelo menos voltou", info)
+//                    }
+//                }
+//            }
+//
+//            task.resume()
+//        }
+//    }
+//
+//    func parseJSON(infoData: Data) -> Client? {
+//        let decoder = JSONDecoder()
+//        do {
+//            let decoderData = try decoder.decode(UserData.self, from: infoData)
+//            let id = decoderData.userAccount.userId
+//            let nome = decoderData.userAccount.name
+//            let conta = decoderData.userAccount.bankAccount
+//            let agencia = decoderData.userAccount.agency
+//            let saldo = decoderData.userAccount.balance
+//            let cliente = Client(clientId: 15, name: "nome", bankAccount: "conta", agency: "agencia", balance: 3000)
+//
+//            return cliente
+//        } catch {
+//            self.delegate?.didFailWithError(error: error)
+//            return nil
+//        }
+//    }
     
-    
+//    func prepararJson() -> String {
+//        let teste = ["nome": "meunome", "senha": "minhasenha"]
+//
+//        do {
+//                var json = try JSONSerialization.data(withJSONObject: teste, options: .prettyPrinted) // pass dictionary to data object and set it as request body
+//                return json
+//            } catch let error {
+//                self.delegate?.didFailWithError(error: error)
+//                return ""
+//            }
+//    }
+//}
+
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            guard let data = data, error == nil else{
+//                print(error?.localizedDescription ?? "No data")
+//                return
+//            }
+//        let safeData = data
+//            if let info = self.parseJSON(infoData: safeData) {
+//                self.delegate?.didUpdateLogin(cliente: info)
+//            }
+
+//    func performRequest(urlString: String){
+//        if let url = URL(string: urlString) {
+//  print(url)
+//            let session = URLSession(configuration: .default)
+//
+//            let task = session.dataTask(with: url) { (data, response, error) in
+//                if error != nil {
+//                    self.delegate?.didFailWithError(error: error!)
+//                    return
+//                }
+//                if let safeData = data {
+//                    if let info = self.parseJSON(infoData: safeData) {
+//                        self.delegate?.didUpdateLogin(cliente: info)
+//                    }
+//                }
+//            }
+//
+//            task.resume()
+//        }
+//    }
+//
 
 

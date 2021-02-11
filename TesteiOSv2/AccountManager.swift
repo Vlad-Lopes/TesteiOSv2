@@ -19,8 +19,6 @@ struct AccountManager {
     let accountURL = "https://bank-app-test.herokuapp.com/api/statements/"
     var delegate: AccountManagerDelegate?
     
-//    var lancamentos: [Account] = []
-    
     func FetchAccount (id: Int) {
         performRequest(urlString: "\(accountURL)\(String(id))")
     }

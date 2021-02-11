@@ -7,23 +7,17 @@
 
 import Foundation
 
-enum LoginError {
-    case valid
-    case noUser
-    case wrongUser
-    case noPassword
-    case wrongPassword
-    case invalid
+enum LoginError: String {
+    case valid = ""
+    case noUser = "Digite o CPF ou o email para acessar a Conta."
+    case wrongCPF = "CPF digitado não é válido."
+    case wrongEmail = "Email digitado não é válido."
+    case noPassword = "Digite a Password"
+    case wrongPassword = "Password deve ter letras e números e pelo menos uma letra maiúscula."
+    case invalid = "User ou Password inválidos, tente novamente."
     
-    var message: String {
-        switch self {
-            case .valid: return ""
-            case .noUser: return "Digite o User para acessar a Conta"
-            case .wrongUser: return "Digite o email ou o CPF do User."
-            case .noPassword: return "Digite a Password"
-            case .wrongPassword: return "Password deve ter letras e números e pelo manos uma letra maiúscula"
-            case .invalid: return "User ou Password inválidos, tente novamente"
-        }
+    func getErroLogin() -> String {
+        return self.rawValue
     }
 }
 
@@ -31,24 +25,16 @@ class UserLogin {
     
     var login: String
     var password: String
-    var message: String?
+    var message: String
     
-    init(login: String, password: String) {
+    init(login: String, password: String, message: String) {
         self.login = login
         self.password = password
+        self.message = message
     }
     
-    func errorMessage(msg: Int) {
-        var textMsg: String
-        switch msg {
-            case 1: textMsg =  "Digite o User para acessar a Conta"
-            case 2: textMsg =  "Digite o email ou o CPF do User."
-            case 3: textMsg =  "Digite a Password"
-            case 4: textMsg =  "Password deve ter pelo menos uma letra maiúscula, um caracter especial e um alfanumérico"
-            case 5: textMsg =  "User ou Password inválidos, tente novamente"
-            default: textMsg = ""
-        }
-        self.message = textMsg
+    func setMessage(message: String) {
+        self.message = message
     }
 }
 
@@ -57,6 +43,14 @@ struct Account {
     var data: String
     var ident: String
     var valor: Double
+}
+
+struct Cliente {
+    var clientId: Int
+    var name: String
+    var bankAccount: String
+    var agency: String
+    var balance: Double
 }
 
 struct UserData: Decodable {
