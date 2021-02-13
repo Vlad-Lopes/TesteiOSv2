@@ -22,14 +22,11 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     var lancamentos: [Account] = []
     
     let formatador = NumberFormatter()
-//    formatador.locale = Locale(identifier: "pt_BR")
-//    formatador.numberStyle = .currency
     
     override func viewDidLoad() {
         super.viewDidLoad()
        
- //       tableViewItens.contentInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        
+        tableViewItens.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         
         var accountManager = AccountManager()
         accountManager.delegate = self
@@ -54,24 +51,17 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1 // lancamentos.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         return lancamentos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemViewCell
         
-//        cell.layer.cornerRadius = 10
-//        cell.layer.masksToBounds = true
-//        cell.layer.shadowOffset = CGSize(width: 0, height: 0)
-//        cell.layer.shadowColor = UIColor.blue.cgColor
-//        cell.layer.shadowRadius = 5
-//        cell.layer.shadowOpacity = 0.40
-//     
-//        cell.layer.masksToBounds = false;
-//        cell.clipsToBounds = false;
-       
-        
-        let lancamento = lancamentos[indexPath.row]
+        let lancamento = lancamentos[indexPath.section]
   
         cell.lblTipo.text = lancamento.tipo
         cell.lblData.text = lancamento.data
