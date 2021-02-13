@@ -11,7 +11,7 @@ import CoreLocation
 protocol AccountManagerDelegate {
     func didUpdateAccount(lancamentos: [Account])
     
-    func didFailWithError(error: Error)
+    func didAccountError(error: Error)
 }
 
 struct AccountManager {
@@ -30,7 +30,7 @@ struct AccountManager {
     
             let task = session.dataTask(with: url) { (data, response, error) in
                 if error != nil {
-                    self.delegate?.didFailWithError(error: error!)
+                    self.delegate?.didAccountError(error: error!)
                     return
                 }
                 if let safeData = data {
@@ -61,7 +61,7 @@ struct AccountManager {
 
             return lancamentos
         } catch {
-            self.delegate?.didFailWithError(error: error)
+            self.delegate?.didAccountError(error: error)
             return nil
         }
     }

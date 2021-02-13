@@ -14,8 +14,7 @@ enum LoginError: String {
     case wrongEmail = "Email digitado não é válido."
     case noPassword = "Digite a Password"
     case wrongPassword = "Password deve ter letras e números e pelo menos uma letra maiúscula."
-    case invalid = "User ou Password inválidos, tente novamente."
-    
+  
     func getErroLogin() -> String {
         return self.rawValue
     }

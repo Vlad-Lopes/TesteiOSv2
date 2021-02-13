@@ -12,33 +12,38 @@ import CPF_CNPJ_Validator
 protocol LoginManagerDelegate {
     func didUpdateLogin(cliente: Cliente)
     
-    func didFailWithError(error: Error)
+    func didLoginError(error: Error)
 }
 
 struct LoginManager {
 
-    var user: UserLogin
+ //   var user: UserLogin
     
-    func tratarLogin() -> Bool{
+    func tratarLogin(user: UserLogin) -> Bool{
         if LoginValidate().validaLogin(user: user) {
             setLogin(login: user.login)
-            if requestLogin(user: user) {
-                return true
-            } else {
-                user.setMessage(message: LoginError.invalid.getErroLogin())
-                return false
-            }
+//            if requestLogin(user: user) {
+//                return true
+//            } else {
+//                user.setMessage(message: LoginError.invalid.getErroLogin())
+//                return false
+//            }
         } else {
             return false
         }
+        
+        requestLogin(user: user)
+        
+        return true
     }
   
     var delegate: LoginManagerDelegate?
     
-    func requestLogin (user: UserLogin) -> Bool {
+    func requestLogin (user: UserLogin) {
+      
         let urlString = "https://bank-app-test.herokuapp.com/api/login"
         
-        let json: [String: Any] = ["user": "test_user", "password": "Test@1"]
+        let json: [String: Any] = ["user": user.login, "password": user.password]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
 
         if let url = URL(string: urlString) {
@@ -51,20 +56,22 @@ struct LoginManager {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: request) { (data, response, error) in
                 if error != nil {
-                    self.delegate?.didFailWithError(error: error!)
+                    self.delegate?.didLoginError(error: error!)
                     return
                 }
                 if let safeData = data {
                     if let info = self.parseJSON(infoData: safeData) {
                         self.delegate?.didUpdateLogin(cliente: info)
-                    }
+                    } 
                 }
             }
             task.resume()
-        } else {
-            return false
         }
-        return true
+       
+//        else {
+//            return false
+//        }
+//        return true
     }
 
     func parseJSON(infoData: Data) -> Cliente? {
@@ -78,11 +85,10 @@ struct LoginManager {
             let agencia = decoderData.userAccount.agency
             let saldo = decoderData.userAccount.balance
             let cliente = Cliente(clientId: id, name: nome, bankAccount: conta, agency: agencia, balance: saldo)
-            print(cliente)
             return cliente
         } catch {
             print(error.localizedDescription)
-            self.delegate?.didFailWithError(error: error)
+            self.delegate?.didLoginError(error: error)
             return nil
         }
     }

@@ -14,15 +14,14 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var lblAlert: UILabel!
     @IBOutlet weak var bttLogin: UIButton!
     
-    var cliente = Cliente(clientId: 5, name: "Vlad", bankAccount: "12345", agency: "789", balance: 3000.45)
-    
+    var cliente: Cliente?
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         bttLogin.layer.cornerRadius = 8
  //       clearLogin(key: "TesteiOSv2")
         txtLogin.text = getLogin()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,25 +31,18 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "CurrencySegue" {
             if let destination = segue.destination as? CurrencyViewController {
-                DispatchQueue.main.async {
-                    destination.cliente = self.cliente
-                }
+                destination.cliente = self.cliente
             }
         }
     }
     
     @IBAction func LoginClicked(_ sender: Any) {
+        
+        var loginManager = LoginManager()
+        loginManager.delegate = self
         let userLogin = UserLogin(login: txtLogin.text ?? "", password: txtPassword.text ?? "", message: "")
-        let isValid = LoginManager(user: userLogin).tratarLogin()
         
-        if  isValid {
-            var loginManager = LoginManager(user: userLogin)
-            loginManager.delegate = self
-        
-            lblAlert.isHidden = true
-            
-            performSegue(withIdentifier: "CurrencySegue", sender: nil)
-        } else {
+        if  !loginManager.tratarLogin(user: userLogin) {
             lblAlert.text = userLogin.message
             lblAlert.isHidden = false
         }
@@ -60,12 +52,19 @@ class LoginViewController: UIViewController {
 extension LoginViewController: LoginManagerDelegate {
     func didUpdateLogin (cliente: Cliente) {
         DispatchQueue.main.async {
+            self.lblAlert.isHidden = true
             self.cliente = cliente
-           }
-       }
+            self.performSegue(withIdentifier: "CurrencySegue", sender: nil)
+        }
+    }
        
-    func didFailWithError(error: Error){
-           print(error)
-       }
+    func didLoginError(error: Error){
+       
+        DispatchQueue.main.async {
+            self.lblAlert.text = "User ou Password inválidos, tente novamente."
+            self.lblAlert.isHidden = false
+        }
+
+    }
 }
 
