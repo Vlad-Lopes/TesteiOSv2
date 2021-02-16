@@ -91,40 +91,37 @@ class AccountSceneViewController: UIViewController, AccountSceneDisplayLogic, UI
     requestStatements()
   }
     
-    override func viewWillAppear(_ animated: Bool) {
-            lblPeriodo.text = "Recentes"
-    }
+    var didStatement = false
 
-  // MARK: Table view
+  // MARK: Prepare Table view
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return statements.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemViewCell
-
-        let statement = statements[indexPath.row]
-  
-        cell.lblTitle.text = statement.title
-        cell.lblDate.text = statement.date
-        cell.lblDescription.text = statement.description
-        cell.lblValue.text = statement.value
         
-        return cell
+        if didStatement {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemViewCell
+
+            let statement = statements[indexPath.row]
+
+            cell.lblTitle.text = statement.title
+            cell.lblDate.text = statement.date
+            cell.lblDescription.text = statement.description
+            cell.lblValue.text = statement.value
+            return cell
+        } else {
+            let cell = UITableViewCell()
+            return cell
+        }
     }
     
-  
-  // MARK: Do something
+  // MARK: Get account data
   
     func formatClientData() {
         let request = AccountScene.SetClient.Request()
         interactor?.requestClientFormat(request: request)
-    }
-    
-    func requestStatements() {
-        let request = AccountScene.Statements.Request(id: 1)
-        interactor?.requestStatements(request: request)
     }
     
     func displayClient(viewModel: AccountScene.SetClient.ViewModel)
@@ -136,11 +133,26 @@ class AccountSceneViewController: UIViewController, AccountSceneDisplayLogic, UI
         }
     }
     
+    // MARK: Get statements data
+    
+    func requestStatements() {
+        let request = AccountScene.Statements.Request(id: 1)
+        interactor?.requestStatements(request: request)
+    }
+    
     func displayStatements(viewModel: AccountScene.Statements.ViewModel) {
         DispatchQueue.main.async {
             self.statements = viewModel.statements
             self.tableViewItens.reloadData()
+            
+            if self.statements[0].title == "" && self.statements[0].date == "" &&
+                self.statements[0].description == "" && self.statements[0].value == "" {
+                self.didStatement = false
+                self.lblPeriodo.text = "Cliente sem lançamentos"
+            } else {
+                self.lblPeriodo.text = "Recentes"
+                self.didStatement = true
+            }
         }
-        
     }
 }

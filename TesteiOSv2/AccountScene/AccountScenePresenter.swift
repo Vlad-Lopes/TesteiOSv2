@@ -16,6 +16,7 @@ protocol AccountScenePresentationLogic
 {
     func presentClient(response: AccountScene.SetClient.Response)
     func presentStatements(response: AccountScene.Statements.Response)
+    func noStatements()
 }
 
 class AccountScenePresenter: AccountScenePresentationLogic
@@ -24,26 +25,27 @@ class AccountScenePresenter: AccountScenePresentationLogic
     
     let formatador = NumberFormatter()
   
-  // MARK: Do something
+  // MARK: Show account data
   
     func presentClient(response: AccountScene.SetClient.Response)
-  {
-    formatador.locale = Locale(identifier: "pt_BR")
-    formatador.numberStyle = .currency
+    {
+        formatador.locale = Locale(identifier: "pt_BR")
+        formatador.numberStyle = .currency
 
-  
-    var agency = response.client.agency
-    agency.insert(".", at: agency.index(agency.startIndex, offsetBy: 2))
-    agency.insert("-", at: agency.index(agency.startIndex, offsetBy: 8))
+        var agency = response.client.agency
+        agency.insert(".", at: agency.index(agency.startIndex, offsetBy: 2))
+        agency.insert("-", at: agency.index(agency.startIndex, offsetBy: 8))
 
 
-    let name = response.client.name
-    let bankAccount = "\(response.client.bankAccount) / \(agency) "
-    let balance = formatador.string(from: NSNumber(value: response.client.balance))!
+        let name = response.client.name
+        let bankAccount = "\(response.client.bankAccount) / \(agency) "
+        let balance = formatador.string(from: NSNumber(value: response.client.balance))!
+        
+        let viewModel = AccountScene.SetClient.ViewModel(name: name, account: bankAccount, balance: balance)
+        viewController?.displayClient(viewModel: viewModel)
+      }
     
-    let viewModel = AccountScene.SetClient.ViewModel(name: name, account: bankAccount, balance: balance)
-    viewController?.displayClient(viewModel: viewModel)
-  }
+    // MARK: Show statements
     
     func presentStatements(response: AccountScene.Statements.Response)
     {
@@ -53,6 +55,13 @@ class AccountScenePresenter: AccountScenePresentationLogic
             accounts.append(account)
         }
         let viewModel = AccountScene.Statements.ViewModel(statements: accounts)
+        viewController?.displayStatements(viewModel: viewModel)
+    }
+    
+    func noStatements() {
+        let account = AccountData(title: "", date: "", description: "", value: "")
+       
+        let viewModel = AccountScene.Statements.ViewModel(statements: [account])
         viewController?.displayStatements(viewModel: viewModel)
     }
 }

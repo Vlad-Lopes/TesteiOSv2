@@ -14,7 +14,7 @@ import UIKit
 
 enum LoginScene
 {
-  // MARK: Use cases
+  // MARK: Login treatment
   
   enum ReadLogin
   {

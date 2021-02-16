@@ -30,15 +30,6 @@ class AccountSceneInteractor: AccountSceneBusinessLogic, AccountSceneDataStore
   var worker: AccountSceneWorker?
     
     var clientLogged: Client?
-
-  // MARK: Do something
-  
-//  func doSomething(request: AccountScene.Something.Request)
-//  {
-//
-//    worker = AccountSceneWorker()
-//    worker?.doSomeWork()
-//  }
     
 // MARK: Do show client data
     
@@ -47,19 +38,19 @@ class AccountSceneInteractor: AccountSceneBusinessLogic, AccountSceneDataStore
         presenter?.presentClient(response: response)
     }
     
-// MARK: Search account statements
+// MARK: Get account statements
     
     func requestStatements(request: AccountScene.Statements.Request) {
         let statementWorker = RequestStatementsWorker()
    //     let response: () = statementWorker.requestStatements(id: request.id)
         statementWorker.requestStatements(id: request.id)
-        { (response) -> () in
-//           if (response != nil)  {
-//                response
-//            }
-        
-            let response = AccountScene.Statements.Response.init(statements: response!)
-            self.presenter?.presentStatements(response: response)
+        { (response, fail) -> () in
+           if fail  {
+                self.presenter?.noStatements()
+           } else {
+                let response = AccountScene.Statements.Response.init(statements: response!)
+                self.presenter?.presentStatements(response: response)
+           }
         }
     }
 }

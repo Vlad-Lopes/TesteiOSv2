@@ -106,9 +106,9 @@
 			children = (
 				A85B8CB525D3365E002F86B6 /* AppDelegate.swift */,
 				A85B8CB725D3365E002F86B6 /* SceneDelegate.swift */,
-				A85B8CCB25D33712002F86B6 /* View */,
-				A85B8CBE25D33666002F86B6 /* Assets.xcassets */,
 				A85B8CC325D33666002F86B6 /* Info.plist */,
+				A85B8CBE25D33666002F86B6 /* Assets.xcassets */,
+				A85B8CCB25D33712002F86B6 /* View */,
 				A8704E1725DC401000EE8EA6 /* LoginScene */,
 				A8704E1825DC403300EE8EA6 /* AccountScene */,
 				A8704E1925DC407E00EE8EA6 /* Models */,

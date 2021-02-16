@@ -14,7 +14,7 @@ import UIKit
 
 class RequestLoginWorker
 {
-    func requestLogin (login: String, password: String, loginResponse: @escaping (_ response: Client?) -> ()) {
+    func requestLogin (login: String, password: String, loginResponse: @escaping (_ response: Client?, _ fail: Bool) -> ()) {
         
         let urlString = "https://bank-app-test.herokuapp.com/api/login"
         
@@ -31,17 +31,15 @@ class RequestLoginWorker
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: request) { (data, response, error) in
                 if error != nil {
-                    loginResponse(nil)
+                    loginResponse(nil, true)
                     return
                 }
                 if let safeData = data {
                     if let info = self.parseJSON(infoData: safeData) {
-                        loginResponse(info)
+                        loginResponse(info, false)
                         return
                     } else {
-    // Tratar quando der erro
-                        print("entrou no else")
-                        loginResponse(nil)
+                        loginResponse(nil, true)
                         return
                     }
                 }

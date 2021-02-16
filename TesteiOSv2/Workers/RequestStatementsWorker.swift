@@ -16,7 +16,7 @@ class RequestStatementsWorker
 {
     var statements: [Statement]?
     
-    func requestStatements(id: Int, statementResponse: @escaping (_ response: [Statement]?) -> ()) {
+    func requestStatements(id: Int, statementResponse: @escaping (_ response: [Statement]?, _ fail: Bool) -> ()) {
         
         let accountURL = "https://bank-app-test.herokuapp.com/api/statements/"
         let urlString =  "\(accountURL)\(String(id))"
@@ -27,12 +27,16 @@ class RequestStatementsWorker
     
             let task = session.dataTask(with: url) { (data, response, error) in
                 if error != nil {
-                    statementResponse(nil)
+                    statementResponse(nil, true)
                     return
                 }
                 if let safeData = data {
                     if let info = self.parseJSON(infoData: safeData) {
-                        statementResponse(info)
+                        statementResponse(info, false)
+                        return
+                    } else {
+                        statementResponse(nil, true)
+                        return
                     }
                 }
             }

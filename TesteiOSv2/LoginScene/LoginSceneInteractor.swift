@@ -41,7 +41,7 @@ class LoginSceneInteractor: LoginSceneBusinessLogic, LoginSceneDataStore
         presenter?.presentLogin(response: response)
     }
     
-    // MARK: Validate user
+    // MARK: Validate and store user
     
     func validateLogin(request: LoginScene.ValidateLogin.Request) {
         worker = LoginSceneWorker()
@@ -54,17 +54,16 @@ class LoginSceneInteractor: LoginSceneBusinessLogic, LoginSceneDataStore
             LoginSceneWorker().storeLogin(login: request.login)
                        
             let worker = RequestLoginWorker()
-//            let response = worker.requestLogin (login: request.login, password: // request.password) { (response) -> () in
             worker.requestLogin (login: request.login, password: request.password)
-            { (response) -> () in
- //               if (response != nil)  {
+            { (response, fail) -> () in
+               if fail {
+                let responseC = LoginScene.ValidateLogin.Response(alertMessage:       LoginError.invalid.getErroLogin())
+                                    self.presenter?.presentMessage(response: responseC)
+               } else {
                     self.clientLogged = response!
                     let responseC = SetClient.Response.init(client: response)
                     self.presenter?.presentClient(response: responseC)
-//                } else {
-//                    let responseC = LoginScene.ValidateLogin.Response(alertMessage:       LoginError.invalid.getErroLogin())
-//                    self.presenter?.presentMessage(response: responseC)
-//                }
+               }
             }
         }
     }

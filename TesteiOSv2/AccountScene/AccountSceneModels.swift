@@ -14,20 +14,7 @@ import UIKit
 
 enum AccountScene
 {
-  // MARK: Use cases
-    
-    enum Something
-    {
-      struct Request
-      {
-      }
-      struct Response
-      {
-      }
-      struct ViewModel
-      {
-      }
-    }
+  // MARK: Account treatment
     
     enum Statements
     {

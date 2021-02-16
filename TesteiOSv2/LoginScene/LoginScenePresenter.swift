@@ -23,13 +23,13 @@ class LoginScenePresenter: LoginScenePresentationLogic
 {
   weak var viewController: LoginSceneDisplayLogic?
   
-  // MARK: Do something
+  // MARK: Return to view
   
-  func presentLogin(response: LoginScene.ReadLogin.Response)
-  {
-    let viewModel = LoginScene.ReadLogin.ViewModel(login: response.login)
-    viewController?.displayUser(viewModel: viewModel)
-  }
+    func presentLogin(response: LoginScene.ReadLogin.Response)
+    {
+        let viewModel = LoginScene.ReadLogin.ViewModel(login: response.login)
+        viewController?.displayUser(viewModel: viewModel)
+    }
     
     func presentMessage(response: LoginScene.ValidateLogin.Response)
     {

@@ -59,11 +59,6 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
     presenter.viewController = viewController
     router.viewController = viewController
     router.dataStore = interactor
-    
-    if bttLogin != nil {
-        bttLogin.layer.cornerRadius = 8
-    }
-    
   }
   
   // MARK: Routing
@@ -83,7 +78,12 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
         searchLogin()
+        
+        if bttLogin != nil {
+            bttLogin.layer.cornerRadius = 8
+        }
     }
     
 
@@ -104,10 +104,15 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
         txtLogin.text = viewModel.login
     }
     
+    // MARK: Show alert messages
+    
     func displayMessage(viewModel: LoginScene.ValidateLogin.ViewModel)
     {
-      lblAlert.text = viewModel.alertMessage
+        DispatchQueue.main.async {
+            self.lblAlert.text = viewModel.alertMessage
+        }
     }
+    // MARK: Navigate to Account
     
     func showAccount(viewModel: SetClient.ViewModel) {
         DispatchQueue.main.async {
@@ -116,6 +121,7 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
         }
 
     }
+    // MARK: Button clicked
     
     @IBAction func buttonTapped(_ sender: Any) {
         let request = LoginScene.ValidateLogin.Request(login: txtLogin.text!,
