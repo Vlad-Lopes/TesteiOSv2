@@ -13,10 +13,10 @@ class ItemViewCell: UITableViewCell {
  
    
     @IBOutlet weak var vwCell: UIView!
-    @IBOutlet weak var lblTipo: UILabel!
-    @IBOutlet weak var lblData: UILabel!
-    @IBOutlet weak var lblIdent: UILabel!
-    @IBOutlet weak var lblValor: UILabel!
+    @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblDescription: UILabel!
+    @IBOutlet weak var lblValue: UILabel!
     
     
     

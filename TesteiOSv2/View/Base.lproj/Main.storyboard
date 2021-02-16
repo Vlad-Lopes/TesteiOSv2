@@ -236,10 +236,10 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="lblData" destination="QLZ-TB-x72" id="g9a-Eh-FAL"/>
-                                            <outlet property="lblIdent" destination="KDF-si-CwX" id="Ana-us-Z2L"/>
-                                            <outlet property="lblTipo" destination="BZS-6e-Z7y" id="315-ao-vES"/>
-                                            <outlet property="lblValor" destination="fN2-t9-z38" id="lrF-8K-RU1"/>
+                                            <outlet property="lblDate" destination="QLZ-TB-x72" id="g9a-Eh-FAL"/>
+                                            <outlet property="lblDescription" destination="KDF-si-CwX" id="Ana-us-Z2L"/>
+                                            <outlet property="lblTitle" destination="BZS-6e-Z7y" id="315-ao-vES"/>
+                                            <outlet property="lblValue" destination="fN2-t9-z38" id="lrF-8K-RU1"/>
                                             <outlet property="vwCell" destination="zFZ-CJ-Oss" id="m7g-Nh-J6P"/>
                                         </connections>
                                     </tableViewCell>

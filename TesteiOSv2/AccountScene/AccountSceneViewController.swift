@@ -106,10 +106,10 @@ class AccountSceneViewController: UIViewController, AccountSceneDisplayLogic, UI
 
         let statement = statements[indexPath.row]
   
-        cell.lblTipo.text = statement.title
-        cell.lblData.text = statement.date
-        cell.lblIdent.text = statement.description
-        cell.lblValor.text = statement.value
+        cell.lblTitle.text = statement.title
+        cell.lblDate.text = statement.date
+        cell.lblDescription.text = statement.description
+        cell.lblValue.text = statement.value
         
         return cell
     }
