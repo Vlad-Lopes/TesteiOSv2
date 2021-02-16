@@ -51,7 +51,8 @@ class AccountScenePresenter: AccountScenePresentationLogic
     {
         var accounts: [AccountData] = []
         for sta in response.statements {
-            let account = AccountData(title: sta.title, date: sta.date, description: sta.desc, value: String(sta.value))
+            let value = formatador.string(from: NSNumber(value: sta.value))!
+            let account = AccountData(title: sta.title, date: sta.date, description: sta.desc, value: String(value))
             accounts.append(account)
         }
         let viewModel = AccountScene.Statements.ViewModel(statements: accounts)

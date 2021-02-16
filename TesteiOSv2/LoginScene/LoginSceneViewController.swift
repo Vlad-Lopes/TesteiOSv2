@@ -78,6 +78,9 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
 
         searchLogin()
         
@@ -86,6 +89,9 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
         }
     }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         txtPassword.text = ""
