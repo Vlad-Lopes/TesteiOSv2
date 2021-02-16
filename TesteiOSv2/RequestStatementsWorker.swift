@@ -17,13 +17,6 @@ class RequestStatementsWorker
     var statements: [Statement]?
     
     func requestStatements(id: Int, statementResponse: @escaping (_ response: [Statement]?) -> ()) {
-//
-//    var delegate: AccountManagerDelegate?
-//
-//    func FetchAccount (id: Int) {
-//        performRequest(urlString: "\(accountURL)\(String(id))")
-//
-//    func performRequest(urlString: String){
         
         let accountURL = "https://bank-app-test.herokuapp.com/api/statements/"
         let urlString =  "\(accountURL)\(String(id))"
@@ -40,15 +33,6 @@ class RequestStatementsWorker
                 if let safeData = data {
                     if let info = self.parseJSON(infoData: safeData) {
                         statementResponse(info)
-//                        self.statements = info
-//                        let interactor = AccountSceneInteractor()
-//                        var presenter: AccountScenePresentationLogic?
-//                        interactor.presenter = presenter
-//                        var response = AccountScene.Statements.Response(statements: info)
-//                    //    response.statements = info
-//                        presenter?.presentStatements(response: response)
-                        
-         //               self.delegate?.didUpdateAccount(lancamentos: info)
                     }
                 }
             }
@@ -74,7 +58,7 @@ class RequestStatementsWorker
 
             return stats
         } catch {
-     //       self.delegate?.didAccountError(error: error)
+            print(error.localizedDescription)
             return nil
         }
     }

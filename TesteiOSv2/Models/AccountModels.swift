@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct Cliente {
-    var clientId: Int
-    var name: String
-    var bankAccount: String
-    var agency: String
-    var balance: Double
-}
+//struct Cliente {
+//    var clientId: Int
+//    var name: String
+//    var bankAccount: String
+//    var agency: String
+//    var balance: Double
+//}
 
 //struct UserData: Decodable {
 //    var userAccount: Detail

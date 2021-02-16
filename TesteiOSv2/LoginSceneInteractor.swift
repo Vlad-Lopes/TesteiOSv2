@@ -20,93 +20,52 @@ protocol LoginSceneBusinessLogic
 
 protocol LoginSceneDataStore
 {
-    var name: String { get set }
-    var bankAccount: String { get set }
-    var balance: String { get set }
+    var clientLogged: Client? { get set }
 }
 
 class LoginSceneInteractor: LoginSceneBusinessLogic, LoginSceneDataStore
 {
   var presenter: LoginScenePresentationLogic?
   var worker: LoginSceneWorker?
-    var name: String = ""
-    var bankAccount: String = ""
-    var balance: String = ""
     
-  // MARK: Do something
+    var clientLogged: Client?
+
+  // MARK: Read stored user
   
-  func readStoredLogin(request: LoginScene.ReadLogin.Request)
-  {
-    worker = LoginSceneWorker()
-    let storedLogin = worker?.readStoredLogin()
+    func readStoredLogin(request: LoginScene.ReadLogin.Request)
+    {
+        worker = LoginSceneWorker()
+        let storedLogin = worker?.readStoredLogin()
+        
+        let response = LoginScene.ReadLogin.Response(login: storedLogin!)
+        presenter?.presentLogin(response: response)
+    }
     
-    let response = LoginScene.ReadLogin.Response(login: storedLogin!)
-    presenter?.presentLogin(response: response)
-  }
+    // MARK: Validate user
     
     func validateLogin(request: LoginScene.ValidateLogin.Request) {
         worker = LoginSceneWorker()
         let message = worker?.validateLogin(user: request.login, password: request.password)
         
-        if message != ""{
+        if message != "" {
             let response = LoginScene.ValidateLogin.Response(alertMessage: message!)
             presenter?.presentMessage(response: response)
         } else {
             LoginSceneWorker().storeLogin(login: request.login)
-            
-//            var requestLogin = RequestLoginWorker()
-//            requestLogin.delegate = self
-//            
+                       
             let worker = RequestLoginWorker()
-      //      worker.requestLogin(login: request.login, password: request.password)
-
-           let response = worker.requestLogin (login: request.login, password: request.password) { (response) -> () in
-            if (response != nil)  {
-                response
+//            let response = worker.requestLogin (login: request.login, password: // request.password) { (response) -> () in
+            worker.requestLogin (login: request.login, password: request.password)
+            { (response) -> () in
+ //               if (response != nil)  {
+                    self.clientLogged = response!
+                    let responseC = SetClient.Response.init(client: response)
+                    self.presenter?.presentClient(response: responseC)
+//                } else {
+//                    let responseC = LoginScene.ValidateLogin.Response(alertMessage:       LoginError.invalid.getErroLogin())
+//                    self.presenter?.presentMessage(response: responseC)
+//                }
             }
-//            else {
-//                nil
-//            }
-            self.name = response?.name ?? ""
-            self.bankAccount = response?.bankAccount ?? ""
-            self.balance = String(response?.balance ?? 0)
-            
-            let responseX = SetClient.Response.init(client: response)
-            self.presenter?.presentClient(response: responseX)
-        }
-            print("foi buscar cliente")
-    //        DispatchQueue.main.async {
-     //           print("ja tem o cliente", response)
-//            let responseX = SetClient.Response.init(client: response as? Client)
-//            self.presenter?.presentClient(response: responseX)
-  //              }
-            
-            
         }
     }
-    
-//    func presentClient(client: Client) {
-//        print("chegou no interactor")
-//        let response = SetClient.Response.init(client: client)
-//        presenter?.presentClient(response: client)
-//    }
 }
-
-//extension LoginSceneInteractor: RequestLoginDelegate {
-//
-//    func didUpdateLogin (client: Client) {
-//        DispatchQueue.main.async {
-//            print("achou o cliente",  client)
-//            let response = SetClient.Response.init(client: client)
-//            self.presenter?.presentClient(response: response)
-//        }
-//    }
-//
-//    func didLoginError(error: Error){
-//        DispatchQueue.main.async {
-//            let response = LoginScene.ValidateLogin.Response(alertMessage: "User ou Password inválidos, tente novamente.")
-//            self.presenter?.presentMessage(response: response )
-//        }
-//
-//    }
-//}

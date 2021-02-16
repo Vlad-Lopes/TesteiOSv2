@@ -16,7 +16,7 @@ protocol LoginSceneDisplayLogic: class
 {
     func displayUser(viewModel: LoginScene.ReadLogin.ViewModel)
     func displayMessage(viewModel: LoginScene.ValidateLogin.ViewModel)
-    func routeToAccount(viewModel: SetClient.ViewModel)
+    func showAccount(viewModel: SetClient.ViewModel)
 }
 
 class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
@@ -24,6 +24,7 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
   var interactor: LoginSceneBusinessLogic?
   var router: (NSObjectProtocol & LoginSceneRoutingLogic & LoginSceneDataPassing)?
 
+    // MARK: Outlets
     
     @IBOutlet weak var txtLogin: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
@@ -58,6 +59,7 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
     presenter.viewController = viewController
     router.viewController = viewController
     router.dataStore = interactor
+    
     if bttLogin != nil {
         bttLogin.layer.cornerRadius = 8
     }
@@ -68,7 +70,6 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
   {
-    
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -77,26 +78,20 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
     }
   }
     
-    func routeToAccount(segue: UIStoryboardSegue?) {
-        
-    }
-  
   // MARK: View lifecycle
   
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
         searchLogin()
     }
     
+
     override func viewWillAppear(_ animated: Bool) {
         txtPassword.text = ""
     }
   
   // MARK: Searching for stored login
-  
-  //@IBOutlet weak var nameTextField: UITextField!
   
     func searchLogin()
     {
@@ -114,22 +109,18 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
       lblAlert.text = viewModel.alertMessage
     }
     
-    func routeToAccount(viewModel: SetClient.ViewModel) {
+    func showAccount(viewModel: SetClient.ViewModel) {
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "Account", sender: nil)
+            self.lblAlert.text = ""
+            self.performSegue(withIdentifier: "AccountScene", sender: nil)
         }
-        
+
     }
     
     @IBAction func buttonTapped(_ sender: Any) {
-
         let request = LoginScene.ValidateLogin.Request(login: txtLogin.text!,
                                                        password: txtPassword.text!)
         interactor?.validateLogin(request: request)
-        
-//        if txtLogin.text == "nova@tela.com" {
-//            performSegue(withIdentifier: "AccountSegue", sender: nil)
-//        }
     }
 }
 

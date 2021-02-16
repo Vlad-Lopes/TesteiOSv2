@@ -14,7 +14,7 @@ import UIKit
 
 protocol AccountScenePresentationLogic
 {
-  func presentClient(response: GetClient.Response)
+    func presentClient(response: AccountScene.SetClient.Response)
     func presentStatements(response: AccountScene.Statements.Response)
 }
 
@@ -26,7 +26,7 @@ class AccountScenePresenter: AccountScenePresentationLogic
   
   // MARK: Do something
   
-  func presentClient(response: GetClient.Response)
+    func presentClient(response: AccountScene.SetClient.Response)
   {
     formatador.locale = Locale(identifier: "pt_BR")
     formatador.numberStyle = .currency
@@ -47,8 +47,6 @@ class AccountScenePresenter: AccountScenePresentationLogic
     
     func presentStatements(response: AccountScene.Statements.Response)
     {
-        print("chegou no presenter da conta", response)
-    
         var accounts: [AccountData] = []
         for sta in response.statements {
             let account = AccountData(title: sta.title, date: sta.date, description: sta.desc, value: String(sta.value))

@@ -54,7 +54,7 @@ class LoginSceneWorker
             
         if password .isEmpty {
             message = LoginError.noPassword.getErroLogin()
-        } else if !testaPassword(passw: password) {
+        } else if !testPassword(passw: password) {
             message = LoginError.wrongPassword.getErroLogin()
         }
 
@@ -64,7 +64,7 @@ class LoginSceneWorker
     
     // MARK: Password validate
     
-    func testaPassword(passw: String) -> Bool {
+    func testPassword(passw: String) -> Bool {
         var upper = false
         var lower = false
         var special = false

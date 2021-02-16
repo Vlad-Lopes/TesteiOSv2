@@ -14,59 +14,52 @@ import UIKit
 
 protocol AccountSceneBusinessLogic
 {
-  func doSomething(request: AccountScene.Something.Request)
-    func requestClient(request: GetClient.Request)
+    func requestClientFormat(request: AccountScene.SetClient.Request)
     func requestStatements(request: AccountScene.Statements.Request)
 }
 
 protocol AccountSceneDataStore
 {
-    var name: String { get set }
-    var bankAccount: String { get set }
-    var balance: String { get set }
+    var clientLogged: Client? { get set }
 }
 
 class AccountSceneInteractor: AccountSceneBusinessLogic, AccountSceneDataStore
 {
-    
+
   var presenter: AccountScenePresentationLogic?
   var worker: AccountSceneWorker?
-    var name: String = ""
-    var bankAccount: String = ""
-    var balance: String = ""
-  
     
-   
+    var clientLogged: Client?
+
   // MARK: Do something
   
-  func doSomething(request: AccountScene.Something.Request)
-  {
-    worker = AccountSceneWorker()
-    worker?.doSomeWork()
-    print(name, bankAccount, balance)
-//    let response = AccountScene.Something.Response()
-//    presenter?.presentClient(response: response)
-  }
+//  func doSomething(request: AccountScene.Something.Request)
+//  {
+//
+//    worker = AccountSceneWorker()
+//    worker?.doSomeWork()
+//  }
     
-    func requestClient(request: GetClient.Request) {
-        let response = GetClient.Response.init(client: request.client)
+// MARK: Do show client data
+    
+    func requestClientFormat(request: AccountScene.SetClient.Request) {
+        let response = AccountScene.SetClient.Response.init(client: clientLogged!)
         presenter?.presentClient(response: response)
     }
-   
+    
+// MARK: Search account statements
+    
     func requestStatements(request: AccountScene.Statements.Request) {
         let statementWorker = RequestStatementsWorker()
-        let response = statementWorker.requestStatements(id: request.id)
+   //     let response: () = statementWorker.requestStatements(id: request.id)
+        statementWorker.requestStatements(id: request.id)
         { (response) -> () in
-            if (response != nil)  {
-                response
-            }
+//           if (response != nil)  {
+//                response
+//            }
         
             let response = AccountScene.Statements.Response.init(statements: response!)
             self.presenter?.presentStatements(response: response)
         }
     }
-//    func presentStatements(response: AccountScene.Statements.Response) {
-//        presenter?.presentStatements(response: response)
-//    }
-    
 }

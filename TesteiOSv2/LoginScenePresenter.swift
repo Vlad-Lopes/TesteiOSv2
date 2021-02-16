@@ -40,7 +40,7 @@ class LoginScenePresenter: LoginScenePresentationLogic
     func presentClient (response: SetClient.Response)
     {
         let viewModel = SetClient.ViewModel(client: response.client)
-        viewController?.routeToAccount(viewModel: viewModel)
+        viewController?.showAccount(viewModel: viewModel)
     }
 }
 

@@ -14,7 +14,6 @@ import UIKit
 
 protocol AccountSceneDisplayLogic: class
 {
-  func displaySomething(viewModel: AccountScene.Something.ViewModel)
     func displayClient(viewModel: AccountScene.SetClient.ViewModel)
     func displayStatements(viewModel: AccountScene.Statements.ViewModel)
 }
@@ -77,30 +76,34 @@ class AccountSceneViewController: UIViewController, AccountSceneDisplayLogic, UI
     }
   }
   
-  // MARK: View lifecycle
+    @IBAction func logoutTouched(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: View lifecycle
   
    
   override func viewDidLoad()
   {
     super.viewDidLoad()
-    doSomething()
     
-    //getClientData(client: client!)
-   
+    formatClientData()
     requestStatements()
   }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            lblPeriodo.text = "Recentes"
+    }
+
   // MARK: Table view
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return statements.count
     }
- //   let dados = AccountData(title: "Teste", date: "15/02/2021", description: "Descricao", value: "123,45")
-//    var statements: [AccountData] = []
-   
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemViewCell
-   //     statements.append(dados)
+
         let statement = statements[indexPath.row]
   
         cell.lblTipo.text = statement.title
@@ -111,28 +114,12 @@ class AccountSceneViewController: UIViewController, AccountSceneDisplayLogic, UI
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        cell.contentView.layer.masksToBounds = true
-//    }
   
   // MARK: Do something
   
-  //@IBOutlet weak var nameTextField: UITextField!
-  
-  func doSomething()
-  {
-    let request = AccountScene.Something.Request()
-    interactor?.doSomething(request: request)
-  }
-  
-  func displaySomething(viewModel: AccountScene.Something.ViewModel)
-  {
-    //nameTextField.text = viewModel.name
-  }
-    func getClientData(client: Client) {
-        let request = GetClient.Request.init(client: client)
-        interactor?.requestClient(request: request)
-        
+    func formatClientData() {
+        let request = AccountScene.SetClient.Request()
+        interactor?.requestClientFormat(request: request)
     }
     
     func requestStatements() {

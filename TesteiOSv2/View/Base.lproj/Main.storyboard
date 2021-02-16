@@ -90,7 +90,7 @@
                         <outlet property="lblAlert" destination="kgI-Wf-i1u" id="oIq-Ek-41d"/>
                         <outlet property="txtLogin" destination="F5a-8h-BOi" id="deC-8e-tol"/>
                         <outlet property="txtPassword" destination="Jsu-7X-A66" id="BUL-qt-tWt"/>
-                        <segue destination="4oO-1h-WTs" kind="presentation" identifier="Account" modalPresentationStyle="fullScreen" id="oET-R6-pvo"/>
+                        <segue destination="4oO-1h-WTs" kind="presentation" identifier="AccountScene" modalPresentationStyle="fullScreen" id="fC4-Rn-l5R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -130,7 +130,7 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="medium"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="LogoutTouch:" destination="4oO-1h-WTs" eventType="touchUpInside" id="lJc-cb-X9F"/>
+                                                    <action selector="logoutTouched:" destination="4oO-1h-WTs" eventType="touchUpInside" id="LmS-aB-lKm"/>
                                                 </connections>
                                             </button>
                                         </subviews>

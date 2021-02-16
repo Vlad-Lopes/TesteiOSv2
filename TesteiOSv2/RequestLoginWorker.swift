@@ -12,36 +12,9 @@
 
 import UIKit
 
-protocol RequestLoginDelegate {
-    func didUpdateLogin(client: Client)
-    
-    func didLoginError(error: Error)
-}
-
-
 class RequestLoginWorker
 {
-    
-//    func createOrder(orderToCreate: Order, completionHandler: @escaping (Order?) -> Void)
-//      {
-//        ordersStore.createOrder(orderToCreate: orderToCreate) { (order: () throws -> Order?) -> Void in
-//          do {
-//            let order = try order()
-//            DispatchQueue.main.async {
-//              completionHandler(order)
-//            }
-//          } catch {
-//            DispatchQueue.main.async {
-//              completionHandler(nil)
-//            }
-//          }
-//        }
-//      }
-    //var client: Client?
-    
-    var delegate: RequestLoginDelegate?
-    
-    func requestLogin (login: String, password: String, loginResponse: @escaping (_ response: Client?) -> ()) { // }, completionHandler: @escaping (Client?) -> Void) {
+    func requestLogin (login: String, password: String, loginResponse: @escaping (_ response: Client?) -> ()) {
         
         let urlString = "https://bank-app-test.herokuapp.com/api/login"
         
@@ -59,21 +32,23 @@ class RequestLoginWorker
             let task = session.dataTask(with: request) { (data, response, error) in
                 if error != nil {
                     loginResponse(nil)
-            //        self.delegate?.didLoginError(error: error!)
                     return
                 }
                 if let safeData = data {
                     if let info = self.parseJSON(infoData: safeData) {
-                        print("fez a leitura")
                         loginResponse(info)
-                  //      self.delegate?.didUpdateLogin(client: info)
+                        return
+                    } else {
+    // Tratar quando der erro
+                        print("entrou no else")
+                        loginResponse(nil)
+                        return
                     }
                 }
             }
             
             task.resume()
         }
-
     }
 
     func parseJSON(infoData: Data) -> Client? {
@@ -90,17 +65,8 @@ class RequestLoginWorker
             return client
         } catch {
             print(error.localizedDescription)
-            self.delegate?.didLoginError(error: error)
             return nil
         }
     }
-    
-//    func didUpdateLogin (client: Client) {
-//        print("chegou aqui no update")
-// 
-//            let interactor = LoginSceneInteractor()
-//            interactor.presenter = LoginScenePresenter()
-//            interactor.presentClient(client: client)
-//       }
-//    }
+
 }

@@ -14,7 +14,7 @@ import UIKit
 
 @objc protocol LoginSceneRoutingLogic
 {
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+  func routeToAccountScene(segue: UIStoryboardSegue?)
 }
 
 protocol LoginSceneDataPassing
@@ -29,7 +29,7 @@ class LoginSceneRouter: NSObject, LoginSceneRoutingLogic, LoginSceneDataPassing
   
   // MARK: Routing
   
-  func routeToAccount(segue: UIStoryboardSegue?)
+  func routeToAccountScene(segue: UIStoryboardSegue?)
   {
     if let segue = segue {
       let destinationVC = segue.destination as! AccountSceneViewController
@@ -55,8 +55,6 @@ class LoginSceneRouter: NSObject, LoginSceneRoutingLogic, LoginSceneDataPassing
   
   func passDataToAccount(source: LoginSceneDataStore, destination: inout AccountSceneDataStore)
   {
-    destination.name = source.name
-    destination.bankAccount = source.bankAccount
-    destination.balance = source.balance
+    destination.clientLogged = source.clientLogged
   }
 }

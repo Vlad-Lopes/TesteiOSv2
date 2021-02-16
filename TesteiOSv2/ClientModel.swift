@@ -20,6 +20,20 @@ struct Client {
     var agency: String
     var balance: Double
 }
+
+enum LoginError: String {
+    case valid = ""
+    case noUser = "Digite o CPF ou o email para acessar a Conta."
+    case wrongCPF = "CPF digitado não é válido."
+    case wrongEmail = "Email digitado não é válido."
+    case noPassword = "Digite a Password"
+    case wrongPassword = "Password deve ter pelo menos: letra maiúscula e minúscula, número e caracter especial."
+    case invalid = "User inválido, verifique login e password."
+    
+    func getErroLogin() -> String {
+        return self.rawValue
+    }
+}
    
 enum SetClient
 {
@@ -34,24 +48,7 @@ enum SetClient
   }
   struct ViewModel
   {
-      var client: Client?
+    var client: Client?
   }
 }
 
-enum GetClient
-{
-  struct Request
-  {
-    var client: Client
-  }
-  struct Response
-  {
-    var client: Client
-  }
-  struct ViewModel
-  {
-    var name: String
-    var bankAccount: String
-    var balance: String
-  }
-}
