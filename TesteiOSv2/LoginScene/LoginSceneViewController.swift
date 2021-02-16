@@ -78,7 +78,7 @@ class LoginSceneViewController: UIViewController, LoginSceneDisplayLogic
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        // MARK: To hide the keyboard
+        // MARK: To hide the device keyboard 
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
 

@@ -32,7 +32,7 @@ class AccountScenePresenter: AccountScenePresentationLogic
         formatador.locale = Locale(identifier: "pt_BR")
         formatador.numberStyle = .currency
 
-        // MARK: Bank account and agency has these contents changed in example
+        // MARK: Bank account and agency has these contents changed
         var agency = response.client.agency
         agency.insert(".", at: agency.index(agency.startIndex, offsetBy: 2))
         agency.insert("-", at: agency.index(agency.startIndex, offsetBy: 8))
