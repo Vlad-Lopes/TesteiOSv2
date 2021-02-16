@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CoreLocation
+//import CoreLocation
 import CPF_CNPJ_Validator
 
 protocol LoginManagerDelegate {

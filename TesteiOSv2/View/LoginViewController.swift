@@ -29,10 +29,10 @@ class LoginViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "CurrencySegue" {
-            if let destination = segue.destination as? CurrencyViewController {
-                destination.cliente = self.cliente
-            }
+        if segue.identifier == "AccountSegue" {
+//            if let destination = segue.destination as? CurrencyViewController {
+//                destination.cliente = self.cliente 
+//            }
         }
     }
     
@@ -54,7 +54,7 @@ extension LoginViewController: LoginManagerDelegate {
         DispatchQueue.main.async {
             self.lblAlert.isHidden = true
             self.cliente = cliente
-            self.performSegue(withIdentifier: "CurrencySegue", sender: nil)
+  //          self.performSegue(withIdentifier: "CurrencySegue", sender: nil)
         }
     }
        

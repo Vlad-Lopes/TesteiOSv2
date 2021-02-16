@@ -8,9 +8,7 @@
 import UIKit
 
 class CurrencyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    
-
+  
     @IBOutlet weak var lblUserName: UILabel!
     @IBOutlet weak var lblAccountNumber: UILabel!
     @IBOutlet weak var lblAccountBalance: UILabel!
@@ -18,7 +16,7 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var tableViewItens: UITableView!
     
-    var cliente: Cliente?
+    var cliente = Cliente(clientId: 1, name: "nome de teste", bankAccount: "0123", agency:"5678901234" , balance: 1000)
     var lancamentos: [Account] = []
     
     let formatador = NumberFormatter()
@@ -26,23 +24,23 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        tableViewItens.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+    //    tableViewItens.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         
         var accountManager = AccountManager()
         accountManager.delegate = self
-        accountManager.FetchAccount(id: cliente!.clientId)
+        accountManager.FetchAccount(id: 1)  // cliente!.clientId)
         
         formatador.locale = Locale(identifier: "pt_BR")
         formatador.numberStyle = .currency
  
-        var agency = self.cliente!.agency
+        var agency = self.cliente.agency
         agency.insert(".", at: agency.index(agency.startIndex, offsetBy: 2))
         agency.insert("-", at: agency.index(agency.startIndex, offsetBy: 8))
        
         
-        self.lblUserName.text = self.cliente!.name
-        self.lblAccountNumber.text = "\(self.cliente!.bankAccount) / \(agency) "
-        self.lblAccountBalance.text = formatador.string(from: NSNumber(value: self.cliente!.balance))
+        self.lblUserName.text = self.cliente.name
+        self.lblAccountNumber.text = "\(self.cliente.bankAccount) / \(agency) "
+        self.lblAccountBalance.text = formatador.string(from: NSNumber(value: self.cliente.balance))
 
         lblPeriodo.text = "Recentes"
 
@@ -51,17 +49,13 @@ class CurrencyViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 // lancamentos.count
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
         return lancamentos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemViewCell
         
-        let lancamento = lancamentos[indexPath.section]
+        let lancamento = lancamentos[indexPath.row]
   
         cell.lblTipo.text = lancamento.tipo
         cell.lblData.text = lancamento.data

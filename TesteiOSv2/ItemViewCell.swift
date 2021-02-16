@@ -10,6 +10,9 @@ import UIKit
 class ItemViewCell: UITableViewCell {
 
     
+ 
+   
+    @IBOutlet weak var vwCell: UIView!
     @IBOutlet weak var lblTipo: UILabel!
     @IBOutlet weak var lblData: UILabel!
     @IBOutlet weak var lblIdent: UILabel!
@@ -22,17 +25,27 @@ class ItemViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        let myColor = UIColor(red: 0.3, green: 0.75, blue: 0.95, alpha: 1)
-        backgroundColor = .clear
-        layer.masksToBounds = false
-        layer.shadowOpacity = 0.3
-        layer.shadowRadius = 5
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        layer.shadowColor = myColor.cgColor   //UIColor.blue.cgColor
-        clipsToBounds = false
-        
-        contentView.backgroundColor = .white
-        contentView.layer.cornerRadius = 10
+        if (vwCell != nil) {
+            let screenWidth = UIScreen.main.bounds.size.width
+            
+            vwCell.translatesAutoresizingMaskIntoConstraints = true
+          
+            vwCell.frame = CGRect(x: 0, y: 0, width: (screenWidth - 32), height: 80)
+         
+            vwCell.center = CGPoint(x: screenWidth / 2, y: contentView.bounds.midY)
+
+            let myColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
+  
+            vwCell.backgroundColor = .white
+            vwCell.layer.shadowOpacity = 1
+            vwCell.layer.shadowRadius = 10
+            vwCell.layer.shadowOffset = CGSize(width: 0, height: 0)
+            vwCell.layer.shadowColor = myColor.cgColor
+            vwCell.clipsToBounds = false
+            
+            vwCell.layer.cornerRadius = 8
+            vwCell.layer.masksToBounds = false
+        }
 
     }
 
@@ -42,25 +55,4 @@ class ItemViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        // add shadow on cell
-//        backgroundColor = .clear // very important
-//        layer.masksToBounds = false
-//        layer.shadowOpacity = 0.5
-//        layer.shadowRadius = 4
-//        layer.shadowOffset = CGSize(width: 0, height: 0)
-//        layer.shadowColor = UIColor.black.cgColor
-//        clipsToBounds = false
-//
-//        // add corner radius on `contentView`
-//        contentView.backgroundColor = .white
-//        contentView.layer.cornerRadius = 8
-   //     contentView.layer.masksToBounds = false
-    }
-    
-    required init?(coder decoder: NSCoder) {
-        super.init(coder: decoder)
-    }
 }
