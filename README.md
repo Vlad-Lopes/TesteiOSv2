@@ -17,6 +17,8 @@ Os testes foram feitos todos com o uso do Postman e o arquivo fornecido, usei ap
 
 Para execução, deve-se instalar o Postman e importar collection: BankApp.postman_collection.json, que se encontra no Branch Master.
 
+Para esconder o teclado virtual e liberar o botão de Login, basta tocar em qualquer outro ponto da tela.
+
 O Postman responde positivamente mesmo que os dados de User e Password não seja os informados no arquivo.
 
 No exemplo da Collection as informações de Conta e Agência estão trocadas, o app faz a troca e o valor do Saldo esta com 4 casas decimais.
